@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <title>Verification Email Template</title>
+    <meta content="Reset Password Email Template." name="description"/>
+</head>
+
+<body style="margin: 0px; padding: 20px 0; background-color: #f2f3f8">
+<div
+        style="
+        @import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700);
+        font-family: 'Open Sans', sans-serif;
+        width: 100%;
+        padding: 40px 0;
+      "
+>
+    <div
+            style="
+          width: 75%;
+          max-width: 800px;
+          margin: auto;
+          padding: 40px 20px;
+          background-color: white;
+          margin-top: 20px;
+          border-radius: 10px;
+          box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        "
+    >
+        <div style="width: 100%">
+            <img src="https://www.ttdecom.co/images/logo_horizontal_white_360x.png"
+                 style="width: 200px; margin: auto; display: block"/>
+        </div>
+        <div style="padding: 0 40px">
+            <p style="color: #455056; margin-bottom: 20px">Hello <span>{{ user_name }}</span>,</p>
+            <p style="color: #455056; line-height: 24px; margin-bottom: 20px">
+                We hope this message finds you well. To ensure the security of your account with Flight Travel, we have
+                initiated a verification process.
+            </p>
+            <p style="color: #455056; line-height: 24px; margin-bottom: 20px">
+                Please use the following verification code to confirm your identity:
+                <strong style="color: #ca2a17; font-size: 24px">{{ verification_code }}</strong>
+            </p>
+            <p style="color: #455056; line-height: 24px; margin-bottom: 20px">
+                If you did not initiate this request, please contact our support team immediately at
+                <a href="mailto: support@flighttravel.com"
+                   style="color: #ca2a17; font-weight: 600; text-decoration: none"></a>
+                to safeguard your account.
+            </p>
+            <div style="color: #455056; line-height: 24px">
+                <div style="margin-bottom: 2px">Best regards,</div>
+                <div>The Flight Travel Dev Team</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

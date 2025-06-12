@@ -15,7 +15,7 @@ class UserService:
         if existed_user:
             raise BadRequestException("Email already exists")
         hash_pwd = generate_password_hash(password)
-        new_user = User(email=email, password=hash_pwd, roles=[Role.USER],
+        new_user = User(email=email, password=hash_pwd, role=Role.USER,
                         permissions=[Permission.ALL], is_active=True, is_verified=True)
         UserRepository.save_user(new_user)
         db.session.commit()

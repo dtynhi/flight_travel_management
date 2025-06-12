@@ -12,7 +12,7 @@ class User(db.Model):
     identification_number = db.Column(db.String(20), nullable=True)
     phone_number = db.Column(db.String(20), nullable=True) 
     status = db.Column(db.String(20), nullable=True, default=Status.ACTIVE)  
-    roles = db.Column(db.JSON, nullable=False, default=[Role.USER])
+    role = db.Column(db.String(20), nullable=False, default=Role.USER)
     permissions = db.Column(db.JSON, nullable=False, default=[Permission.ALL])
 
     def to_dict(self):
@@ -24,6 +24,6 @@ class User(db.Model):
             'identification_number': self.identification_number,
             'phone_number': self.phone_number,
             'status': self.status,
-            'roles': self.roles,
+            'role': self.role,
             'permissions': self.permissions
         }

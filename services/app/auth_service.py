@@ -20,7 +20,7 @@ class AuthService:
             email=email,
             password=hashed_password,
             full_name=full_name,
-            roles=Role.USER,
+            role=Role.USER,
             phone_number=phone_number,
             identification_number=identification_number,
             status="ACTIVE"

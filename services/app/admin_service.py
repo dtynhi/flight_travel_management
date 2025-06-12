@@ -10,7 +10,7 @@ class AdminService:
     @staticmethod
     def create_user(email, password, full_name=None, user_role=Role.USER, 
                     phone_number=None, identification_number=None,
-                    roles=[Role.EMPLOYEE], permissions=[Permission.ALL]):
+                    role=Role.EMPLOYEE, permissions=[Permission.ALL]):
         """
         Create a new user with specified role and permissions
         Only admins can use this method
@@ -29,7 +29,7 @@ class AdminService:
             password=hashed_password,
             full_name=full_name,
             user_role=user_role,
-            roles=roles,
+            role=role,
             permissions=permissions,
             phone_number=phone_number,
             identification_number=identification_number,
@@ -50,7 +50,7 @@ class AdminService:
         
         if role:
             # Filter by role using JSON query
-            query = query.filter(User.roles.contains([role]))
+            query = query.filter(User.role.contains([role]))
         
         if status:
             query = query.filter_by(status=status)
@@ -83,8 +83,8 @@ class AdminService:
         if 'identification_number' in data:
             user.identification_number = data['identification_number']
         
-        if 'roles' in data:
-            user.roles = data['roles']
+        if 'role' in data:
+            user.role = data['role']
         
         if 'permissions' in data:
             user.permissions = data['permissions']

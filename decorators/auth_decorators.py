@@ -20,15 +20,15 @@ def has_authority(roles=[], permissions=[], all_roles_required=False, all_permis
             if not user:
                 return jsonify(ErrorApiResponse(message="User not found").to_dict()), 404
 
-            user_roles = user.get("roles", [])
+            user_roles = user.get("role", [])
             user_permissions = user.get("permissions", [])
 
             if all_roles_required:
                 if not all(role in user_roles for role in roles):
-                    return jsonify(ErrorApiResponse(message="Unauthorized: Insufficient roles").to_dict()), 403
+                    return jsonify(ErrorApiResponse(message="Unauthorized: Insufficient role").to_dict()), 403
             else:
                 if not any(role in user_roles for role in roles):
-                    return jsonify(ErrorApiResponse(message="Unauthorized: Insufficient roles").to_dict()), 403
+                    return jsonify(ErrorApiResponse(message="Unauthorized: Insufficient role").to_dict()), 403
 
             if not permissions:
                 return fn(*args, **kwargs)

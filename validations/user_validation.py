@@ -26,7 +26,7 @@ class RegisterSchema(Schema):
     full_name = fields.String(required=False, allow_none=True)
     phone_number = fields.String(required=False, allow_none=True)
     identification_number = fields.String(required=False, allow_none=True)
-    roles = fields.String(required=False, default=Role.USER)
+    role = fields.String(required=False, default=Role.USER)
     
 
 class UserSchema(Schema):

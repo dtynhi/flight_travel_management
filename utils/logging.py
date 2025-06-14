@@ -26,7 +26,7 @@ def set_up_logging(app):
     if not os.path.exists(AppConfig.LOG_FILE_PATH):
         os.makedirs(AppConfig.LOG_FILE_PATH)
 
-    log_file = os.path.join(AppConfig.LOG_FILE_PATH, f"lark_integration_{datetime.now().strftime('%Y-%m-%d')}.log")
+    log_file = os.path.join(AppConfig.LOG_FILE_PATH, f"QLMB_{datetime.now().strftime('%Y-%m-%d')}.log")
 
     log_handler = ConcurrentRotatingFileHandler(
         log_file, maxBytes=5 * 1024 * 1024, backupCount=5, encoding='utf-8'

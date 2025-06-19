@@ -1,4 +1,4 @@
-from repositories.flight_repository import FlightRepository, AirportRepository
+from repositories.flight_repository import FlightRepository
 from exceptions.app_exception import BadRequestException, EntityNotFoundException
 
 class FlightService:
@@ -32,7 +32,13 @@ class FlightService:
         return flight.to_dict()
     
     @staticmethod
-    def get_airports():
-        """Get all airports"""
-        airports = AirportRepository.find_all()
-        return [airport.to_dict() for airport in airports]
+    def create_flight(data: dict):
+        """Create new flight"""
+        # Add validation and flight creation logic here
+        pass
+    
+    @staticmethod
+    def update_flight(flight_id: int, data: dict):
+        """Update flight"""
+        # Add flight update logic here
+        pass

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 
 from payload.api_response import SuccessApiResponse, ErrorApiResponse
 from services.app.flight_service import FlightService
@@ -42,14 +42,17 @@ def get_all_flights():
         return jsonify(ErrorApiResponse(message=str(e)).to_dict()), 500
 
 @flight_bp.route('/<int:flight_id>', methods=['GET'])
-@jwt_required()
 def get_flight(flight_id):
     """Get flight by ID"""
     flight = FlightService.get_flight_by_id(flight_id)
     return jsonify(SuccessApiResponse(data=flight).to_dict()), 200
 
-@flight_bp.route('/airports', methods=['GET'])
-def get_airports():
-    """Get all airports"""
-    airports = FlightService.get_airports()
-    return jsonify(SuccessApiResponse(data=airports).to_dict()), 200
+# PROTECTED - Authentication required
+@flight_bp.route('/', methods=['POST'])
+@jwt_required()
+def create_flight():
+    """Create flight - ADMIN ONLY"""
+    # Check if user is admin
+    current_user = get_jwt_identity()
+    # Add admin check logic
+    pass

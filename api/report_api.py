@@ -6,7 +6,9 @@ report_bp = Blueprint('report', __name__)
 
 @report_bp.route('/monthly', methods=['GET'])
 def get_monthly_reports():
-    data = ReportService.get_all_monthly_reports()
+    year = request.args.get('year', type=int)
+    month = request.args.get('month', type=int)
+    data = ReportService.get_all_monthly_reports(year=year, month=month)
     return jsonify(SuccessApiResponse(data=data).__dict__)
 
 @report_bp.route('/monthly/<int:report_id>/details', methods=['GET'])

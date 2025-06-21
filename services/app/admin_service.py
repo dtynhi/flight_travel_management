@@ -106,3 +106,10 @@ class AdminService:
         user.status = status
         db.session.commit()
         return user.to_dict()
+    
+    @staticmethod
+    def list_employees():
+        list_employees = UserRepository.get_list_employees()
+        if not list_employees:
+            raise EntityNotFoundException("No employees found")
+        return [employee.to_dict() for employee in list_employees]

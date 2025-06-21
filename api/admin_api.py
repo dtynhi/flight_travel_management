@@ -90,3 +90,12 @@ def update_user_status(user_id):
     status = data.get('status')
     user = AdminService.update_user_status(user_id, status)
     return jsonify(SuccessApiResponse(data=user).to_dict())
+
+
+@admin_bp.route('/employees', methods=['GET'])
+@jwt_required()
+@has_authority(roles=[Role.ADMIN])
+def list_employees():
+    """List all employees in the system"""
+    employees = AdminService.list_employees()
+    return jsonify(SuccessApiResponse(data=employees).to_dict())

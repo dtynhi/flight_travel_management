@@ -75,6 +75,7 @@ $RECYCLE.BIN/
 
 # Logs and temporary files
 /logs/*
+logs/*
 *.log
 *.tmp
 *.temp

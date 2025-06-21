@@ -176,12 +176,16 @@ def create_flight():
 
         for item in seat_config:
             seat = FlightTicketClass(
-                flight_id=flight.id,
-                ticket_class_id=item['ticket_class_id'],
-                total_seats=item['total_seats'],
-                created_at=datetime.now(timezone.utc),
-                updated_at=datetime.now(timezone.utc)
-            )
+    flight_id=flight.id,
+    ticket_class_id=item['ticket_class_id'],
+    total_seats=item['total_seats'],
+    available_seats=item.get('available_seats', item['total_seats']),
+    ticket_price=item['ticket_price'],
+    created_at=datetime.now(timezone.utc),
+    updated_at=datetime.now(timezone.utc)
+)
+
+
             db.session.add(seat)
 
         db.session.commit()

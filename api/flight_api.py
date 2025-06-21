@@ -5,12 +5,64 @@ from models.intermediate_airport_model import IntermediateAirport
 from models.airport_model import Airport
 from models.flight_ticket_class_model import FlightTicketClass
 from payload.api_response import SuccessApiResponse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app.extensions import db
-
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from payload.api_response import SuccessApiResponse, ErrorApiResponse
+from services.app.flight_service import FlightService
 
 flight_bp = Blueprint('flight', __name__)
 
+@flight_bp.route('/search', methods=['GET'])
+def search_flights():
+    """Search flights with optional filters"""
+    try:
+        search_params = {
+            'departureAirport': request.args.get('departureAirport'),
+            'arrivalAirport': request.args.get('arrivalAirport'),
+            'flightDate': request.args.get('flightDate')
+        }
+        
+        # Remove None values
+        search_params = {k: v for k, v in search_params.items() if v}
+        
+        flights = FlightService.search_flights(search_params)
+        
+        return jsonify(SuccessApiResponse(data={
+            'flights': flights,
+            'total': len(flights)
+        }).to_dict()), 200
+        
+    except Exception as e:
+        return jsonify(ErrorApiResponse(message=str(e)).to_dict()), 500
+
+@flight_bp.route('/', methods=['GET'])
+def get_all_flights():
+    """Get all flights"""
+    try:
+        flights = FlightService.get_all_flights()
+        return jsonify(SuccessApiResponse(data={
+            'flights': flights,
+            'total': len(flights)
+        }).to_dict()), 200
+    except Exception as e:
+        return jsonify(ErrorApiResponse(message=str(e)).to_dict()), 500
+
+@flight_bp.route('/<int:flight_id>', methods=['GET'])
+def get_flight(flight_id):
+    """Get flight by ID"""
+    flight = FlightService.get_flight_by_id(flight_id)
+    return jsonify(SuccessApiResponse(data=flight).to_dict()), 200
+
+# PROTECTED - Authentication required
+@flight_bp.route('/', methods=['POST'])
+@jwt_required()
+def create_flight():
+    """Create flight - ADMIN ONLY"""
+    # Check if user is admin
+    current_user = get_jwt_identity()
+    # Add admin check logic
+    pass
 
 @flight_bp.route('/airports', methods=['GET'])
 def get_airports():
@@ -82,8 +134,8 @@ def create_flight():
                 stop_order=stop['stop_order'],
                 stop_duration=stop['stop_duration'],
                 notes=stop.get('note', ''),
-                created_at=datetime.utcnow(),
-                updated_at=datetime.utcnow()
+                created_at=datetime.now(timezone.utc)(),
+                updated_at=datetime.now(timezone.utc)()
             )
             db.session.add(inter)
 
@@ -93,8 +145,8 @@ def create_flight():
                 flight_id=flight.id,
                 ticket_class_id=item['ticket_class_id'],
                 total_seats=item['total_seats'],
-                created_at=datetime.utcnow(),
-                updated_at=datetime.utcnow()
+                created_at=datetime.now(timezone.utc)(),
+                updated_at=datetime.now(timezone.utc)()
             )
             db.session.add(seat)
 
@@ -306,7 +358,7 @@ def update_flight(flight_id):
         flight.arrival_time = arrival_time
         flight.flight_duration = flight_time_minutes
         flight.base_price = base_price
-        flight.updated_at = datetime.utcnow()
+        flight.updated_at = datetime.now(timezone.utc)()
 
         # Xoá sân bay trung gian cũ
         IntermediateAirport.query.filter_by(flight_id=flight.id).delete()
@@ -318,8 +370,8 @@ def update_flight(flight_id):
                 stop_order=stop['stop_order'],
                 stop_duration=stop['stop_duration'],
                 notes=stop.get('note', ''),
-                created_at=datetime.utcnow(),
-                updated_at=datetime.utcnow()
+                created_at=datetime.now(timezone.utc)(),
+                updated_at=datetime.now(timezone.utc)()
             )
             db.session.add(new_stop)
 
@@ -333,8 +385,8 @@ def update_flight(flight_id):
     total_seats=item['total_seats'],
     available_seats=item.get('available_seats', item['total_seats']),  # mặc định bằng total_seats nếu không truyền
     ticket_price=item['ticket_price'],  # PHẢI có dòng này!
-    created_at=datetime.utcnow(),
-    updated_at=datetime.utcnow()
+    created_at=datetime.now(timezone.utc)(),
+    updated_at=datetime.now(timezone.utc)()
 )
 
             db.session.add(seat)
@@ -358,7 +410,7 @@ def cancel_flight(flight_id):
 
         # Nếu có vé thì chỉ đổi trạng thái
         flight.status = "CANCELLED"
-        flight.updated_at = datetime.utcnow()
+        flight.updated_at = datetime.now(timezone.utc)()
         db.session.commit()
 
         return jsonify({
@@ -371,9 +423,3 @@ def cancel_flight(flight_id):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-
-
-
-

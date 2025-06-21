@@ -1,5 +1,5 @@
 from app.extensions import db
-from datetime import datetime
+from datetime import datetime, timezone
 from constant.constant import Status
 
 class Airport(db.Model):
@@ -8,13 +8,15 @@ class Airport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     airport_name = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(20), nullable=False, default=Status.ACTIVE)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
     def to_dict(self):
         return {
-            "id": self.id,
-            "airport_name": self.airport_name,
-            "status": self.status
+            'id': self.id,
+            'airportName': self.airport_name,
+            'name': self.airport_name, 
+            'createdAt': self.created_at.isoformat() if self.created_at else None,
+            'updatedAt': self.updated_at.isoformat() if self.updated_at else None,
+            'status': self.status
         }
-

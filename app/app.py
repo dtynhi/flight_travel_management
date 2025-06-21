@@ -7,6 +7,7 @@ from api.admin_api import admin_bp
 from app import init_app
 from config.app_config import AppConfig
 from api.booking_api import booking_bp
+from api.regulation_api import regulation_bp
 
 # from services.app.job_service import init_scheduler
 
@@ -23,5 +24,6 @@ app.register_blueprint(user_bp, url_prefix='/api/v1/user')
 app.register_blueprint(admin_bp, url_prefix='/api/v1/admin')
 app.register_blueprint(index_bp, url_prefix='')
 app.register_blueprint(booking_bp)
+app.register_blueprint(regulation_bp, url_prefix='/api/v1/regulations')
 
 

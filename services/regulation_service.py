@@ -1,3 +1,4 @@
+import json
 from models.regulation_model import Regulation
 from app.extensions import db
 
@@ -12,13 +13,22 @@ class RegulationService:
 
     @staticmethod
     def update_or_create(key, value, description=None):
-        reg = Regulation.query.filter_by(key=key).first()
-        if reg:
-            reg.value = value
-            if description:
-                reg.description = description
-        else:
-            reg = Regulation(key=key, value=value, description=description)
+        reg = RegulationService.get_by_key(key)
+        if not reg:
+            reg = Regulation(key=key)
             db.session.add(reg)
+
+        reg.value = value
+        reg.description = description
         db.session.commit()
         return reg
+
+    @staticmethod
+    def get_value(key: str, default=None, parse_json=True):
+        reg = RegulationService.get_by_key(key)
+        if not reg:
+            return default
+        try:
+            return json.loads(reg.value) if parse_json else reg.value
+        except Exception:
+            return reg.value

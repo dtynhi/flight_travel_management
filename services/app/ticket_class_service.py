@@ -83,7 +83,7 @@ class TicketClassService:
         if 'status' in data:
             ticket_class.status = data['status']
         
-        ticket_class.updated_at = datetime.utcnow()
+        ticket_class.updated_at = datetime.now(timezone.utc)()
         updated_ticket_class = TicketClassRepository.update_ticket_class(ticket_class)
         return updated_ticket_class.to_dict()
     
@@ -100,6 +100,6 @@ class TicketClassService:
             raise BadRequestException(f"Invalid status. Must be one of: {', '.join(valid_statuses)}")
         
         ticket_class.status = status
-        ticket_class.updated_at = datetime.utcnow()
+        ticket_class.updated_at = datetime.now(timezone.utc)()
         updated_ticket_class = TicketClassRepository.update_ticket_class(ticket_class)
         return updated_ticket_class.to_dict()

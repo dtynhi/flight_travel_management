@@ -1,5 +1,5 @@
 from app.extensions import db
-from datetime import datetime
+from datetime import datetime, timezone
 
 class FlightTicketClass(db.Model):
     __tablename__ = 'tbl_flight_ticket_classes'
@@ -9,8 +9,8 @@ class FlightTicketClass(db.Model):
     total_seats = db.Column(db.Integer)
     available_seats = db.Column(db.Integer)
     ticket_price = db.Column(db.Numeric(15, 2), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
     # Relationships
     ticket_class = db.relationship('TicketClass', backref='flight_ticket_classes', lazy='select')

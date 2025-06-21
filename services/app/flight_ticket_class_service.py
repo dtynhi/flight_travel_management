@@ -143,7 +143,7 @@ class FlightTicketClassService:
                 raise BadRequestException("Available seats cannot exceed total seats")
             flight_ticket_class.available_seats = available_seats
         
-        flight_ticket_class.updated_at = datetime.utcnow()
+        flight_ticket_class.updated_at = datetime.now(timezone.utc)()
         updated_flight_ticket_class = FlightTicketClassRepository.update_flight_ticket_class(flight_ticket_class)
         return updated_flight_ticket_class.to_dict()
     

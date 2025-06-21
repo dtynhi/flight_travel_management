@@ -1,5 +1,5 @@
 from app.extensions import db
-from datetime import datetime
+from datetime import datetime, timezone
 
 class TicketClass(db.Model):
     __tablename__ = 'tbl_ticket_classes'
@@ -7,8 +7,8 @@ class TicketClass(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     class_name = db.Column(db.String(20), nullable=False)
     price_multiplier = db.Column(db.Numeric(5, 2), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
     status = db.Column(db.String(20))
 
     def to_dict(self):

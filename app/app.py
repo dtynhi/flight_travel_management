@@ -31,5 +31,4 @@ app.register_blueprint(ticket_class_bp, url_prefix='/api/v1/ticket-class')
 app.register_blueprint(flight_ticket_class_bp, url_prefix='/api/v1/flight-ticket-class')
 app.register_blueprint(report_bp, url_prefix='/api/v1/reports')
 app.register_blueprint(index_bp, url_prefix='')
-
-
+app.register_blueprint(flight_bp,url_prefix='/api/v1/flight')

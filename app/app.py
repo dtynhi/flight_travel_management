@@ -14,12 +14,12 @@ from config.app_config import AppConfig
 from api.booking_api import booking_bp
 from api.system_parameter_api import system_parameter_bp
 from api.regulation_api import regulation_bp
-
+from api.ticket_api import ticket_bp
 # from services.app.job_service import init_scheduler
 
 AppConfig.load()
 
-app = Flask(__name__, template_folder='/templates', static_url_path='/static')
+app = Flask(__name__, template_folder="/templates", static_url_path="/static")
 app.config.from_object(AppConfig)
 init_app(app)
 
@@ -35,6 +35,7 @@ app.register_blueprint(flight_ticket_class_bp, url_prefix='/api/v1/flight-ticket
 app.register_blueprint(report_bp, url_prefix='/api/v1/reports')
 app.register_blueprint(system_parameter_bp, url_prefix='/api/v1/system-parameters')
 app.register_blueprint(index_bp, url_prefix='')
+app.register_blueprint(ticket_bp)
 app.register_blueprint(booking_bp, url_prefix="/api/ticket")
 app.register_blueprint(regulation_bp, url_prefix='/api/v1/regulations')
 

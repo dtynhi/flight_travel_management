@@ -41,16 +41,23 @@ def search_airports():
 @jwt_required()
 def create_airport():
     """Create new airport (Admin only)"""
-    pass
+    AirportService.create_airport(request.json)
+    return jsonify(SuccessApiResponse().to_dict()), 201
 
 @airport_bp.route('/<int:airport_id>', methods=['PUT'])
 @jwt_required()
 def update_airport(airport_id):
-    """Update airport (Admin only)"""
-    pass
+    airport = AirportService.update_airport(airport_id, request.json)
+    return jsonify(SuccessApiResponse(data=airport).to_dict()), 200
 
 @airport_bp.route('/<int:airport_id>/status', methods=['PATCH'])  # Changed to PATCH
 @jwt_required()
 def update_airport_status(airport_id):
     """Update airport status (Admin only)"""
     pass
+
+@airport_bp.route('/<int:airport_id>', methods=['DELETE'])
+@jwt_required()
+def delete_airport(airport_id):
+    AirportService.delete_airport(airport_id)
+    return jsonify(SuccessApiResponse().to_dict()), 200

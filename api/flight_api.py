@@ -10,6 +10,8 @@ from datetime import datetime, timedelta, timezone
 from app.extensions import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from services.app.flight_service import FlightService
+from services.app.system_parameter_service import SystemParameterService
+from services.app.ticket_class_service import TicketClassService
 
 flight_bp = Blueprint('flight', __name__)
 

@@ -1,7 +1,7 @@
 from repositories.ticket_class_repository import TicketClassRepository
 from models.ticket_class_model import TicketClass
 from exceptions.app_exception import BadRequestException, EntityNotFoundException
-from datetime import datetime
+from datetime import datetime, timezone
 
 class TicketClassService:
     @staticmethod
@@ -83,7 +83,7 @@ class TicketClassService:
         if 'status' in data:
             ticket_class.status = data['status']
         
-        ticket_class.updated_at = datetime.now(timezone.utc)()
+        ticket_class.updated_at = datetime.now(timezone.utc)
         updated_ticket_class = TicketClassRepository.update_ticket_class(ticket_class)
         return updated_ticket_class.to_dict()
     

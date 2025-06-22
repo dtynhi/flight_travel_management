@@ -60,7 +60,7 @@ class FlightRepository:
         
         # Filter by status
         query = query.filter(
-            or_(Flight.status == 'ACTIVE', Flight.status == 'SCHEDULED', Flight.status.is_(None))
+            or_(Flight.status == 'ACTIVE', Flight.status == 'SCHEDULED', Flight.status == 'CANCELLED', Flight.status.is_(None))
         )
         
         return query.order_by(Flight.departure_time.asc()).all()

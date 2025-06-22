@@ -53,7 +53,7 @@ def create_ticket_class():
             raise BadRequestException("Request body is required")
         
         ticket_class = TicketClassService.create_ticket_class(data)
-        return jsonify(SuccessApiResponse(data=ticket_class, message="Ticket class created successfully").to_dict()), 201
+        return jsonify(SuccessApiResponse(data=ticket_class).to_dict()), 201
     except BadRequestException as e:
         return jsonify(ErrorApiResponse(message=str(e)).to_dict()), 400
     except Exception as e:
@@ -69,7 +69,7 @@ def update_ticket_class(ticket_class_id):
             raise BadRequestException("Request body is required")
         
         ticket_class = TicketClassService.update_ticket_class(ticket_class_id, data)
-        return jsonify(SuccessApiResponse(data=ticket_class, message="Ticket class updated successfully").to_dict()), 200
+        return jsonify(SuccessApiResponse(data=ticket_class).to_dict()), 200
     except EntityNotFoundException as e:
         return jsonify(ErrorApiResponse(message=str(e)).to_dict()), 404
     except BadRequestException as e:
@@ -87,7 +87,7 @@ def update_ticket_class_status(ticket_class_id):
             raise BadRequestException("Status is required")
         
         ticket_class = TicketClassService.update_ticket_class_status(ticket_class_id, data['status'])
-        return jsonify(SuccessApiResponse(data=ticket_class, message="Ticket class status updated successfully").to_dict()), 200
+        return jsonify(SuccessApiResponse(data=ticket_class).to_dict()), 200
     except EntityNotFoundException as e:
         return jsonify(ErrorApiResponse(message=str(e)).to_dict()), 404
     except BadRequestException as e:

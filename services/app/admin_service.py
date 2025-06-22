@@ -147,6 +147,9 @@ class AdminService:
         if 'role' in data:
             user.role = data['role']
         
+        if 'status' in data:
+            user.status = data['status']
+        
         # Save changes
         db.session.commit()
         return user.to_dict()

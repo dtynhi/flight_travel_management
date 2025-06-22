@@ -1,3 +1,4 @@
+from sqlalchemy import and_
 from app.extensions import db
 from models.user_model import User
 from constant.constant import Role, Status
@@ -18,6 +19,10 @@ class UserRepository:
     
     @staticmethod
     def get_employees():
-        return db.session.query(User).filter(User.role == Role.EMPLOYEE and User.status != Status.DELETED).all()
-    
+        return db.session.query(User).filter(
+            and_(
+                User.role == Role.EMPLOYEE,
+                User.status != Status.DELETED
+            )
+        ).all()
     

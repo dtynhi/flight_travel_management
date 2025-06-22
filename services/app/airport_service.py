@@ -4,6 +4,7 @@ from repositories.airport_repository import AirportRepository
 from exceptions.app_exception import BadRequestException, EntityNotFoundException
 from models.airport_model import Airport
 from app.extensions import db
+from repositories.flight_repository import FlightRepository
 
 class AirportService:
     @staticmethod
@@ -98,4 +99,5 @@ class AirportService:
             raise EntityNotFoundException(f"Airport with ID {airport_id} not found")
         
         deleted_airport = AirportRepository.delete_airport(airport_id)
+        FlightRepository.update_flight_status_by_airport(airport_id, Status.DELETED)
         return deleted_airport.to_dict() if deleted_airport else None

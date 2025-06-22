@@ -98,7 +98,7 @@ def list_employees():
     employees = AdminService.get_employee()
     return jsonify(SuccessApiResponse(data=employees).to_dict())
 
-@admin_bp.route('/employees/<int:user_id>/delete', methods=['GET'])
+@admin_bp.route('/employees/<int:user_id>/delete', methods=['DELETE'])
 @jwt_required()
 @has_authority(roles=[Role.ADMIN])
 def delete_employee(user_id):

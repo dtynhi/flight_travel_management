@@ -6,7 +6,6 @@ class CreateUserSchema(Schema):
     email = fields.Email(required=True, error_messages={'invalid': 'Invalid email format'})
     password = fields.String(required=True)
     full_name = fields.String(required=False)
-    user_role = fields.String(required=False, default=Role.USER)
     phone_number = fields.String(required=False, allow_none=True)
     identification_number = fields.String(required=False, allow_none=True)
     role = fields.String(required=False, default=Role.USER)

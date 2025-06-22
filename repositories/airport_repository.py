@@ -1,4 +1,5 @@
 from app.extensions import db
+from constant.constant import Status
 from models.airport_model import Airport
 from sqlalchemy import and_, or_, func
 
@@ -17,7 +18,7 @@ class AirportRepository:
     @staticmethod
     def find_by_id(airport_id: int):
         """Get airport by ID"""
-        return db.session.query(Airport).filter(Airport.id == airport_id).first()
+        return db.session.query(Airport).filter(Airport.id == airport_id and Airport.status != Status.DELETED).first()
     
     @staticmethod
     def find_by_name(name: str):

@@ -108,3 +108,19 @@ class FlightRepository:
                 or_(Flight.status == 'ACTIVE', Flight.status == 'SCHEDULED', Flight.status.is_(None))
             )
         ).order_by(Flight.departure_time.asc()).all()
+        
+    @staticmethod
+    def update_flight_status_by_airport(airport_id: int, status: str):
+        """Update flight status by airport ID"""
+        flights = db.session.query(Flight).filter(
+            or_(
+                Flight.departure_airport_id == airport_id,
+                Flight.arrival_airport_id == airport_id
+            )
+        ).all()
+        
+        for flight in flights:
+            flight.status = status
+        
+        db.session.commit()
+        return flights

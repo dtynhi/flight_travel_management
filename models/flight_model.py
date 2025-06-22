@@ -1,5 +1,5 @@
 from app.extensions import db
-from datetime import datetime
+from datetime import datetime, timezone
 
 class Flight(db.Model):
     __tablename__ = 'tbl_flights'
@@ -10,8 +10,8 @@ class Flight(db.Model):
     departure_time = db.Column(db.DateTime, nullable=False)
     flight_duration = db.Column(db.Integer)  # integer (minutes)
     base_price = db.Column(db.Numeric(15, 0))  # numeric(15,0)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)  # ✅ Fixed datetime
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # ✅ Fixed datetime
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))  # ✅ Fixed datetime
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))  # ✅ Fixed datetime
     status = db.Column(db.String(20))  # character varying(20)
     arrival_time = db.Column(db.DateTime, nullable=False)
 

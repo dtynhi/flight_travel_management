@@ -192,6 +192,18 @@ def update_flight_partial(flight_id):
         if 'departure_time' in data:
             try:
                 departure_dt = datetime.fromisoformat(data['departure_time'])
+                
+                # Check if new departure time is in the past
+                current_time = datetime.now(timezone.utc)
+                if departure_dt.tzinfo is None:
+                    # If departure_dt is naive, assume it's in UTC for comparison
+                    departure_dt_utc = departure_dt.replace(tzinfo=timezone.utc)
+                else:
+                    departure_dt_utc = departure_dt.astimezone(timezone.utc)
+                    
+                if departure_dt_utc < current_time:
+                    return jsonify(ErrorApiResponse(message="Thời gian khởi hành không được là thời điểm trong quá khứ").to_dict()), 400
+                
                 flight.departure_time = departure_dt
                 if flight.flight_duration:
                     stops = IntermediateAirport.query.filter_by(flight_id=flight.id).all()

@@ -27,7 +27,7 @@ def get_ticket_classes_by_flight(flight_id):
         return jsonify(SuccessApiResponse(data={
             'flightId': flight_id,
             'ticketClasses': ticket_classes,
-            'total': len(ticket_classes)
+            'total': len(ticket_classes),
         }).to_dict()), 200
     except EntityNotFoundException as e:
         return jsonify(ErrorApiResponse(message=str(e)).to_dict()), 404

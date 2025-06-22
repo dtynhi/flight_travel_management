@@ -8,8 +8,7 @@ from repositories.user_repository import UserRepository
 
 class AdminService:
     @staticmethod
-    def create_user(email, password, full_name=None, user_role=Role.USER, 
-                    phone_number=None, identification_number=None,
+    def create_user(email, password, full_name=None, phone_number=None, identification_number=None,
                     role=Role.EMPLOYEE, permissions=[Permission.ALL]):
         """
         Create a new user with specified role and permissions
@@ -28,7 +27,6 @@ class AdminService:
             email=email,
             password=hashed_password,
             full_name=full_name,
-            user_role=user_role,
             role=role,
             permissions=permissions,
             phone_number=phone_number,
@@ -104,5 +102,51 @@ class AdminService:
             raise BadRequestException("Invalid status value")
         
         user.status = status
+        db.session.commit()
+        return user.to_dict()
+    
+    @staticmethod
+    def get_employee():
+        """Get all employees"""
+        employees = UserRepository.get_employees()
+        if not employees:
+            raise EntityNotFoundException("No employees found")
+        
+        return [employee.to_dict() for employee in employees]
+    
+    @staticmethod
+    def delete_user(user_id):
+        """Delete a user by ID"""
+        user = UserRepository.find_by_id(user_id)
+        if not user:
+            raise EntityNotFoundException(f"User with ID {user_id} not found")
+        
+        # Set status to DELETED instead of removing from database
+        user.status = Status.DELETED
+        db.session.commit()
+        
+        return {"message": "User deleted successfully", "user_id": user_id}
+    
+    @staticmethod
+    def update_employee(user_id, data):
+        """Update an employee's information"""
+        user = UserRepository.find_by_id(user_id)
+        if not user:
+            raise EntityNotFoundException(f"Employee with ID {user_id} not found")
+        
+        # Update fields
+        if 'full_name' in data:
+            user.full_name = data['full_name']
+        
+        if 'phone_number' in data:
+            user.phone_number = data['phone_number']
+        
+        if 'identification_number' in data:
+            user.identification_number = data['identification_number']
+            
+        if 'role' in data:
+            user.role = data['role']
+        
+        # Save changes
         db.session.commit()
         return user.to_dict()

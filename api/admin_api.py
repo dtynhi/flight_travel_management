@@ -5,13 +5,13 @@ from constant.constant import Role, Permission
 from decorators.auth_decorators import has_authority
 from exceptions.app_exception import BadRequestException
 from models.user_model import User
-from payload.api_response import SuccessApiResponse
+from payload.api_response import SuccessApiResponse, ErrorApiResponse
 from services.app.admin_service import AdminService
 from validations.admin_validation import CreateUserSchema
 
 admin_bp = Blueprint('admin', __name__)
 
-@admin_bp.route('/users', methods=['POST'])
+@admin_bp.route('/employees/create', methods=['POST'])
 @jwt_required()
 @has_authority(roles=[Role.ADMIN])
 def create_user():
@@ -30,10 +30,9 @@ def create_user():
             email=user_data['email'],
             password=user_data['password'],
             full_name=user_data.get('full_name'),
-            user_role=user_data.get('user_role', Role.USER),
             phone_number=user_data.get('phone_number'),
             identification_number=user_data.get('identification_number'),
-            roles=user_data.get('roles', [Role.EMPLOYEE]),
+            role=user_data.get('role', Role.EMPLOYEE),
             permissions=user_data.get('permissions', [Permission.ALL])
         )
         
@@ -90,3 +89,47 @@ def update_user_status(user_id):
     status = data.get('status')
     user = AdminService.update_user_status(user_id, status)
     return jsonify(SuccessApiResponse(data=user).to_dict())
+
+@admin_bp.route('/employees', methods=['GET'])
+@jwt_required()
+@has_authority(roles=[Role.ADMIN])
+def list_employees():
+    """List all employees in the system"""
+    employees = AdminService.get_employee()
+    return jsonify(SuccessApiResponse(data=employees).to_dict())
+
+@admin_bp.route('/employees/<int:user_id>/delete', methods=['DELETE'])
+@jwt_required()
+@has_authority(roles=[Role.ADMIN])
+def delete_employee(user_id):
+    """Delete a user by ID using GET method (marks as DELETED)"""
+    try:
+        # Call service to delete user (set status to DELETED)
+        AdminService.delete_user(user_id)
+        return jsonify(SuccessApiResponse().to_dict()), 200
+    except Exception as e:
+        # Handle specific exceptions
+        if isinstance(e, BadRequestException):
+            return jsonify(ErrorApiResponse(message=str(e))), 400
+        # Log and return other exceptions
+        return jsonify(ErrorApiResponse(message=str(e))), 500
+    
+@admin_bp.route('/employees/<int:user_id>/update', methods=['PATCH'])
+@jwt_required()
+@has_authority(roles=[Role.ADMIN])
+def update_employee(user_id):
+    """Update user information"""
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify(ErrorApiResponse(message="No update data provided").to_dict()), 400
+        
+        updated_user = AdminService.update_employee(user_id, data)
+        return jsonify(SuccessApiResponse(data=updated_user).to_dict()), 200
+    except Exception as e:
+        # Handle specific exceptions
+        if isinstance(e, BadRequestException):
+            return jsonify(ErrorApiResponse(message=str(e)).to_dict()), 400
+        # Log and return other exceptions
+        return jsonify(ErrorApiResponse(message=str(e)).to_dict()), 500

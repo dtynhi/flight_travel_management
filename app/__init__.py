@@ -16,7 +16,7 @@ def init_app(app: Flask):
     CORS(app, resources={
         r"/*": {
             "origins": AppConfig.CORS_ORIGINS,
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
             "supports_credentials": True
         }
     })

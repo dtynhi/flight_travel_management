@@ -14,7 +14,7 @@ class Ticket(db.Model):
         nullable=False,
     )
     flight_id = db.Column(db.Integer, db.ForeignKey("tbl_flights.id"), nullable=False)
-    status = db.Column(db.String(50), default="Đã đặt")
+    status = db.Column(db.String(50), default="Đã xác nhận")
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated_at = db.Column(
         db.DateTime,

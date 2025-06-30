@@ -93,8 +93,10 @@ class TicketService:
         detail.tickets_sold += 1
         detail.revenue += price
 
-        if monthly_report.total_revenue > 0:
-            detail.percentage = round(detail.revenue / monthly_report.total_revenue, 2)
+        if float(monthly_report.total_revenue) > 0:
+            detail.percentage = round(
+                float(detail.revenue) / float(monthly_report.total_revenue), 2
+            )
 
         # === BÁO CÁO NĂM ===
         yearly_report = YearlyReport.query.filter_by(
@@ -127,7 +129,7 @@ class TicketService:
         )
 
         yearly_report.percentage = round(
-            yearly_report.total_revenue / total_yearly_revenue, 2
+            float(yearly_report.total_revenue) / float(total_yearly_revenue), 2
         )
 
         db.session.commit()

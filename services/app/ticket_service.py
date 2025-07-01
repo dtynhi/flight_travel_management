@@ -7,6 +7,7 @@ from models.monthly_report_model import MonthlyReport
 from models.monthly_report_detail_model import MonthlyReportDetail
 from models.yearly_report_model import YearlyReport
 from sqlalchemy import extract
+from decimal import Decimal
 
 
 class TicketService:
@@ -52,7 +53,7 @@ class TicketService:
         departure_time = flight.departure_time or datetime.utcnow()
         month = departure_time.month
         year = departure_time.year
-        price = float(flight.base_price or 0)
+        price = Decimal(str(flight.base_price or 0))
 
         # === BÁO CÁO THÁNG ===
         monthly_report = MonthlyReport.query.filter_by(
@@ -63,7 +64,7 @@ class TicketService:
                 month=month,
                 year=year,
                 total_tickets_sold=0,
-                total_revenue=0,
+                total_revenue=Decimal("0"),
                 created_at=datetime.utcnow(),
                 deletion_status="ACTIVE",
             )
@@ -83,7 +84,7 @@ class TicketService:
                 report_id=monthly_report.id,
                 flight_id=flight.id,
                 tickets_sold=0,
-                revenue=0,
+                revenue=Decimal("0"),
                 percentage=0,
                 created_at=datetime.utcnow(),
                 deletion_status="ACTIVE",
@@ -107,7 +108,7 @@ class TicketService:
                 year=year,
                 month=month,
                 number_of_flights=0,
-                total_revenue=0,
+                total_revenue=Decimal("0"),
                 percentage=0,
                 created_at=datetime.utcnow(),
                 deletion_status="ACTIVE",
@@ -121,12 +122,9 @@ class TicketService:
             Flight.status != "Đã hủy",
         ).count()
 
-        total_yearly_revenue = (
-            db.session.query(db.func.sum(YearlyReport.total_revenue))
-            .filter_by(year=year, deletion_status="ACTIVE")
-            .scalar()
-            or 1
-        )
+        total_yearly_revenue = db.session.query(
+            db.func.sum(YearlyReport.total_revenue)
+        ).filter_by(year=year, deletion_status="ACTIVE").scalar() or Decimal("1")
 
         yearly_report.percentage = round(
             float(yearly_report.total_revenue) / float(total_yearly_revenue), 2

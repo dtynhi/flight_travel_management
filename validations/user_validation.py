@@ -8,17 +8,9 @@ def validate_password(password):
     """
     Validate password complexity requirements:
     - At least 6 characters
-    - At least one lowercase letter
-    - At least one uppercase letter
-    - At least one digit
-    - At least one special character (!@().)
     """
-    password_regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@().])[A-Za-z\d!@().]{6,}$'
-
-    if not re.match(password_regex, password):
-        raise ValidationError(
-            "Password must be at least 6 characters long and contain lowercase, uppercase, digits, and special characters (!@().)"
-        )
+    if len(password) < 6:
+        raise ValidationError("Password must be at least 6 characters long.")
 
 class RegisterSchema(Schema):
     email = fields.Email(required=True, error_messages={'invalid': 'Invalid email format'})

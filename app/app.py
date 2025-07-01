@@ -11,6 +11,7 @@ from api.flight_ticket_class_api import flight_ticket_class_bp
 from api.report_api import report_bp
 from app import init_app
 from config.app_config import AppConfig
+from api.booking_api import booking_bp
 from api.system_parameter_api import system_parameter_bp
 from api.regulation_api import regulation_bp
 from api.ticket_api import ticket_bp
@@ -36,4 +37,7 @@ app.register_blueprint(report_bp, url_prefix="/api/v1/reports")
 app.register_blueprint(system_parameter_bp, url_prefix="/api/v1/system-parameters")
 app.register_blueprint(index_bp, url_prefix="")
 app.register_blueprint(ticket_bp)
-app.register_blueprint(regulation_bp, url_prefix="/api/v1/regulations")
+app.register_blueprint(booking_bp, url_prefix="/api/ticket")
+app.register_blueprint(regulation_bp, url_prefix='/api/v1/regulations')
+
+

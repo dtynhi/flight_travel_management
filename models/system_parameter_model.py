@@ -6,7 +6,6 @@ class SystemParameter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     # QĐ1
-    number_of_airports = db.Column(db.Integer, nullable=False)
     minimum_flight_duration = db.Column(db.Integer, nullable=False)  # phút
     max_intermediate_stops = db.Column(db.Integer, nullable=False)
     minimum_stop_duration = db.Column(db.Integer, nullable=False)    # phút
@@ -20,10 +19,10 @@ class SystemParameter(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "number_of_airports": self.number_of_airports,
             "minimum_flight_duration": self.minimum_flight_duration,
             "max_intermediate_stops": self.max_intermediate_stops,
             "minimum_stop_duration": self.minimum_stop_duration,
             "maximum_stop_duration": self.maximum_stop_duration,
             "booking_deadline": self.booking_deadline
         }
+
